@@ -4,8 +4,9 @@ server:
 spring:
   mail:
     host: smtp.163.com
-    username: xxxx@163.com
-    password: xxxx
+    username: 17681102655@163.com
+    #邮箱的授权码
+    password: 1234
     properties:
       mail:
         smtp:
