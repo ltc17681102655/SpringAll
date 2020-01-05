@@ -1,6 +1,8 @@
 package com.springboot.demo.controller;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.mail.internet.MimeMessage;
 
@@ -28,7 +30,8 @@ public class EmailController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    private static String receiver = "17681102655@163.com";
+    //    private static String receiver = "17681102655@163.com";
+    private static String receiver = "jiazhihua@aikucun.com";
 
     @RequestMapping("sendSimpleEmail")
     public String sendSimpleEmail() {
@@ -88,24 +91,34 @@ public class EmailController {
     }
 
     @RequestMapping("sendInlineMail")
-    public String sendInlineMail() {
-        MimeMessage message = null;
-        try {
-            message = jms.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(from);
-            helper.setTo(receiver); // 接收地址
-            helper.setSubject("一封带静态资源的邮件"); // 标题
-            helper.setText("<html><body>博客图：<img src='cid:img'/></body></html>", true); // 内容
-            // 传入附件
-            FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/img/sunshine.png"));
-            helper.addInline("img", file);
-            jms.send(message);
-            return "发送成功";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
+    public void sendInlineMail() {
+
+
+        List<Long> phones = new ArrayList<>();
+        long phone = 17681102655l;
+        for (int i = 0; i < 10; i++) {
+            phones.add(phone + i);
         }
+
+        phones.parallelStream().forEach(c -> {
+            try {
+                MimeMessage message = jms.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                helper.setFrom(from);
+                helper.setTo(c + "@163.com"); // 接收地址
+                helper.setSubject("去库存平台"); // 标题
+                helper.setText("<html><body>" + "<p style=\"color: red\"> 年底清仓,大品牌大力度促销,倒计时一周.</p>\n" +
+                        "<p style=\"color: red\">保存图片,微信扫一扫即可进入选购</p>" +
+                        "<img src='cid:img'/></body></html>", true); // 内容
+                // 传入附件
+                FileSystemResource file = new FileSystemResource(new File("src/main/resources/static/img/H5商城压缩.jpg"));
+                helper.addInline("img", file);
+                jms.send(message);
+                System.out.println("发送成功==" + c);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
     }
 
     @RequestMapping("sendTemplateEmail")
