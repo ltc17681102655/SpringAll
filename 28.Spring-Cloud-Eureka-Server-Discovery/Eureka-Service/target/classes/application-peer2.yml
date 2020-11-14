@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
@@ -7,10 +7,9 @@ spring:
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: peer2
   client:
     serviceUrl:
-      defaultZone: http://mrbird:123456@localhost:8080/eureka/
+      defaultZone: http://mrbird:123456@peer1:8080/eureka/
   server:
     enable-self-preservation: false
-
